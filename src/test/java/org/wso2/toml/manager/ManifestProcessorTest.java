@@ -220,7 +220,7 @@ public class ManifestProcessorTest {
         Manifest manifest = parseTomlContentFromFile(resource_dir + "example.toml");
         Assert.assertEquals(manifest.getName(), "\"org-name/string\"");
         Assert.assertEquals(manifest.getVersion(), "\"1.0.0\"");
-        Assert.assertEquals(manifest.getDescription(), "\"This is a sample description\"");
+        Assert.assertEquals(manifest.getDescription(), "\"This is a sample description which contains information\"");
         Assert.assertEquals(manifest.getDocumentationURL(), "\"https://ballerinalang.org/docs/api/0.95.5/\"");
         Assert.assertEquals(manifest.getHomepageURL(), "\"https://ballerinalang.org/\"");
         Assert.assertEquals(manifest.getRepositoryURL(), "\"https://github.com/ballerinalang/ballerina\"");

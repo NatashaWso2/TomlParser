@@ -1,7 +1,7 @@
 grammar Toml;
 toml : expression ( newline expression )*;
 
-ALPHA : [A-Z] | [a-z];
+ALPHA : ([A-Z])* | ([a-z])*;
 SPACE : ' ';
 HYPHEN : '-';
 PERIOD : '.';
@@ -130,12 +130,11 @@ exp : E floatIntPart;
 
 E : 'e';
 
-specialFloat :  minus | PLUS ? ( inf | nan );
-inf : 'inf';
-nan : 'nan';
+specialFloat :  minus | PLUS ? ( INF | NAN );
+INF : 'inf';
+NAN : 'nan';
 
 // Boolean
-//
 
 bool : TRUE | FALSE;
 

@@ -448,26 +448,6 @@ public interface TomlListener extends ParseTreeListener {
 	 */
 	void exitSpecialFloat(TomlParser.SpecialFloatContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TomlParser#inf}.
-	 * @param ctx the parse tree
-	 */
-	void enterInf(TomlParser.InfContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#inf}.
-	 * @param ctx the parse tree
-	 */
-	void exitInf(TomlParser.InfContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TomlParser#nan}.
-	 * @param ctx the parse tree
-	 */
-	void enterNan(TomlParser.NanContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#nan}.
-	 * @param ctx the parse tree
-	 */
-	void exitNan(TomlParser.NanContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link TomlParser#bool}.
 	 * @param ctx the parse tree
 	 */

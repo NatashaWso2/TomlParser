@@ -1097,54 +1097,6 @@ public class TomlLoader extends TomlBaseListener {
      * @param ctx
      */
     @Override
-    public void enterInf(TomlParser.InfContext ctx) {
-        super.enterInf(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <p>The default implementation does nothing.</p>
-     *
-     * @param ctx
-     */
-    @Override
-    public void exitInf(TomlParser.InfContext ctx) {
-        super.exitInf(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <p>The default implementation does nothing.</p>
-     *
-     * @param ctx
-     */
-    @Override
-    public void enterNan(TomlParser.NanContext ctx) {
-        super.enterNan(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <p>The default implementation does nothing.</p>
-     *
-     * @param ctx
-     */
-    @Override
-    public void exitNan(TomlParser.NanContext ctx) {
-        super.exitNan(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <p>The default implementation does nothing.</p>
-     *
-     * @param ctx
-     */
-    @Override
     public void enterBool(TomlParser.BoolContext ctx) {
         super.enterBool(ctx);
     }

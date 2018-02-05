@@ -9,11 +9,11 @@ authors = ["tyler@wso2.com","manu@wso2.com"]
 
 # A short blurb about the package. This is not rendered in any format when
 # uploaded to central.ballerina.io (aka this is not markdown).
-description = "This is a sample description"
+description = "This is a sample description which contains information"
 
-# These URLs point to more details about the package. These are
+# These URLs point to more information about the package. These are
 # intended to be webviews of the relevant data, not necessarily compatible
-# with VCS tools and the like.
+# with VCS tools and the like i.e. nan or inf.
 documentation = "https://ballerinalang.org/docs/api/0.95.5/"
 homepage = "https://ballerinalang.org/"
 repository = "https://github.com/ballerinalang/ballerina"
