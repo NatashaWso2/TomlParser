@@ -25,7 +25,6 @@ import org.ballerina.toml.parser.model.Headers;
 import org.ballerina.toml.parser.model.Manifest;
 import org.ballerina.toml.parser.model.PackageHeaderField;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -156,14 +155,8 @@ public class TomlCustomListener extends TomlBaseListener {
      * @param arrayValuesContext ArrayValuesContext object
      */
     public void addArrayElements(TomlParser.ArrayValuesContext arrayValuesContext) {
-        List<String> arrayElements = new ArrayList<>();
-        if (arrayValuesContext.arrayvalsNonEmpty().size() > 0) {
-            for (TomlParser.ArrayvalsNonEmptyContext valueContext : arrayValuesContext.arrayvalsNonEmpty()) {
-                arrayElements.add(valueContext.getText());
-            }
-        }
         if (packageAttributeList.contains(keyProcessed)) {
-            PackageHeaderField.get(keyProcessed).setArrayElements(this.manifest, arrayElements);
+            PackageHeaderField.get(keyProcessed).setValue(this.manifest, arrayValuesContext);
         }
     }
 
@@ -180,7 +173,7 @@ public class TomlCustomListener extends TomlBaseListener {
                     .map(i -> i.getText().equals(headerProcessed) ? "" : i.getText())
                     .collect(Collectors.joining(".")).replaceFirst(".", "");
             // Add the package name
-            DependencyField.get("name").setValue(dependency, pkgName);
+            DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, pkgName);
         }
     }
 
@@ -192,7 +185,7 @@ public class TomlCustomListener extends TomlBaseListener {
     public void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
         // Add the package name
         dependency = new Dependency();
-        DependencyField.get("name").setValue(dependency, keyProcessed);
+        DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, keyProcessed);
         if (ctx.inlineTableKeyvalsNonEmpty().size() > 0) {
             for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
                 String name = valueContext.key().getText();

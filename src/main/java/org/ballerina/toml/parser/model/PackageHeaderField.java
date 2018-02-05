@@ -18,8 +18,10 @@
 package org.ballerina.toml.parser.model;
 
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.ballerina.toml.parser.antlr4.TomlParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,118 +32,83 @@ import java.util.Map;
 public enum PackageHeaderField {
     NAME("name") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setName(ctx.val().getText());
         }
 
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
-        }
     },
     VERSION("version") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setVersion(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     DESCRIPTION("description") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setDescription(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     DOCUMENTATION("documentation") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setDocumentationURL(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     HOMEPAGE("homepage") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setHomepageURL(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     REPOSITORY("repository") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setRepositoryURL(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     README("readme") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setReadmeFilePath(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     LICENSE("license") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
+        void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
             manifest.setLicense(ctx.val().getText());
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-
         }
     },
 
     AUTHORS("authors") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-            manifest.setAuthors(elementList);
+        void setValueArray(Manifest manifest, TomlParser.ArrayValuesContext ctx) {
+            List<String> arrayElements = new ArrayList<>();
+            if (ctx.arrayvalsNonEmpty().size() > 0) {
+                for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
+                    arrayElements.add(valueContext.getText());
+                }
+            }
+            manifest.setAuthors(arrayElements);
         }
     },
 
     KEYWORDS("keywords") {
         @Override
-        public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
-        }
-
-        @Override
-        public void setArrayElements(Manifest manifest, List<String> elementList) {
-            manifest.setKeywords(elementList);
+        void setValueArray(Manifest manifest, TomlParser.ArrayValuesContext ctx) {
+            List<String> arrayElements = new ArrayList<>();
+            if (ctx.arrayvalsNonEmpty().size() > 0) {
+                for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
+                    arrayElements.add(valueContext.getText());
+                }
+            }
+            manifest.setKeywords(arrayElements);
         }
     };
 
@@ -184,18 +151,34 @@ public enum PackageHeaderField {
     }
 
     /**
+     * Generic method to set the value based on whether its a single value or an array of elements
+     */
+    public void setValue(Manifest manifest, ParserRuleContext ctx) {
+        if (ctx instanceof TomlParser.KeyvalContext &&
+                !(((TomlParser.KeyvalContext) ctx).val().array() instanceof TomlParser.ArrayContext)) {
+            setValueString(manifest, (TomlParser.KeyvalContext) ctx);
+        } else if (ctx instanceof TomlParser.ArrayValuesContext) {
+            setValueArray(manifest, (TomlParser.ArrayValuesContext) ctx);
+        }
+    }
+
+    /**
      * Set the value to the manifest object
      *
      * @param manifest
-     * @param ctx
+     * @param keyvalContext
      */
-    public abstract void setValue(Manifest manifest, TomlParser.KeyvalContext ctx);
+    void setValueString(Manifest manifest, TomlParser.KeyvalContext keyvalContext) {
+        throw new UnsupportedOperationException("non array values are not supported");
+    }
 
     /**
      * Set array elements to the manifest object
      *
      * @param manifest
-     * @param elementList
+     * @param arrayValuesContext
      */
-    public abstract void setArrayElements(Manifest manifest, List<String> elementList);
+    void setValueArray(Manifest manifest, TomlParser.ArrayValuesContext arrayValuesContext) {
+        throw new UnsupportedOperationException("array values are not supported");
+    }
 }
