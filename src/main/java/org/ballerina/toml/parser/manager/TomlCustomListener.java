@@ -23,22 +23,19 @@ import org.ballerina.toml.parser.model.Dependency;
 import org.ballerina.toml.parser.model.DependencyField;
 import org.ballerina.toml.parser.model.Headers;
 import org.ballerina.toml.parser.model.Manifest;
-import org.ballerina.toml.parser.model.PackageHeaderField;
+import org.ballerina.toml.parser.model.PackageHeader;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Custom listener which is extended from the Toml listener with our own custom logic
  */
 public class TomlCustomListener extends TomlBaseListener {
-    private static final Set<String> packageAttributeList = PackageHeaderField.lookup.keySet();
-    private static final Set<String> dependancyAttributeList = DependencyField.lookup.keySet();
     private final Manifest manifest;
     private Dependency dependency;
-    private String headerProcessed;
-    private String keyProcessed;
+    private String currentHeader;
+    private String currentKey;
 
     public TomlCustomListener(Manifest context) {
         this.manifest = context;
@@ -53,7 +50,7 @@ public class TomlCustomListener extends TomlBaseListener {
      */
     @Override
     public void enterKeyval(TomlParser.KeyvalContext ctx) {
-        keyProcessed = ctx.key().getText();
+        currentKey = ctx.key().getText();
         addKeyValPair(ctx);
     }
 
@@ -124,9 +121,9 @@ public class TomlCustomListener extends TomlBaseListener {
      * Add the dependencies and patches to the manifest object
      */
     public void setDependancyAndPatches() {
-        if (headerProcessed.contains(Headers.DEPENDENCIES.getValue())) {
+        if (currentHeader.contains(Headers.DEPENDENCIES.getValue())) {
             this.manifest.addDependancy(dependency);
-        } else if (headerProcessed.contains(Headers.PATCHES.getValue())) {
+        } else if (currentHeader.contains(Headers.PATCHES.getValue())) {
             this.manifest.addPatches(dependency);
         }
     }
@@ -137,14 +134,16 @@ public class TomlCustomListener extends TomlBaseListener {
      * @param ctx KeyvalContext object
      */
     public void addKeyValPair(TomlParser.KeyvalContext ctx) {
-        if (headerProcessed.equals(Headers.PACKAGE.getValue())) {
-            if (packageAttributeList.contains(keyProcessed)) {
-                PackageHeaderField.get(keyProcessed).setValue(this.manifest, ctx);
+        if (currentHeader.equals(Headers.PACKAGE.getValue())) {
+            PackageHeader packageHeaderField = PackageHeader.lookup.get(currentKey);
+            if (packageHeaderField != null) {
+                packageHeaderField.setValue(this.manifest, ctx);
             }
-        } else if (headerProcessed.equals(Headers.DEPENDENCIES.getValue()) ||
-                headerProcessed.equals(Headers.PATCHES.getValue())) {
-            if (dependancyAttributeList.contains(keyProcessed)) {
-                DependencyField.get(keyProcessed).setValue(dependency, ctx.val().getText());
+        } else if (currentHeader.equals(Headers.DEPENDENCIES.getValue()) ||
+                currentHeader.equals(Headers.PATCHES.getValue())) {
+            DependencyField dependencyField = DependencyField.lookup.get(currentKey);
+            if (dependencyField != null) {
+                dependencyField.setValue(dependency, ctx.val().getText());
             }
         }
     }
@@ -155,8 +154,9 @@ public class TomlCustomListener extends TomlBaseListener {
      * @param arrayValuesContext ArrayValuesContext object
      */
     public void addArrayElements(TomlParser.ArrayValuesContext arrayValuesContext) {
-        if (packageAttributeList.contains(keyProcessed)) {
-            PackageHeaderField.get(keyProcessed).setValue(this.manifest, arrayValuesContext);
+        PackageHeader packageHeaderField = PackageHeader.lookup.get(currentKey);
+        if (packageHeaderField != null) {
+            packageHeaderField.setValue(this.manifest, arrayValuesContext);
         }
     }
 
@@ -166,12 +166,11 @@ public class TomlCustomListener extends TomlBaseListener {
      * @param keyContextList list of keys specified in the header
      */
     public void addHeader(List<TomlParser.KeyContext> keyContextList) {
-        headerProcessed = keyContextList.get(0).getText();
+        currentHeader = keyContextList.get(0).getText();
         if (keyContextList.size() > 1) {
             dependency = new Dependency();
-            String pkgName = keyContextList.stream()
-                    .map(i -> i.getText().equals(headerProcessed) ? "" : i.getText())
-                    .collect(Collectors.joining(".")).replaceFirst(".", "");
+            String pkgName = keyContextList.stream().filter(i -> !i.getText().equals(currentHeader))
+                    .map(i -> i.getText()).collect(Collectors.joining("."));
             // Add the package name
             DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, pkgName);
         }
@@ -183,16 +182,14 @@ public class TomlCustomListener extends TomlBaseListener {
      * @param ctx InlineTableKeyvalsContext object
      */
     public void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
-        // Add the package name
         dependency = new Dependency();
-        DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, keyProcessed);
+        DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, currentKey);
         if (ctx != null) {
-            if (ctx.inlineTableKeyvalsNonEmpty().size() > 0) {
-                for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
-                    String name = valueContext.key().getText();
-                    if (dependancyAttributeList.contains(name)) {
-                        DependencyField.get(name).setValue(dependency, valueContext.val().getText());
-                    }
+            for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
+                String name = valueContext.key().getText();
+                DependencyField dependencyField = DependencyField.lookup.get(name);
+                if (dependencyField != null) {
+                    DependencyField.get(name).setValue(dependency, valueContext.val().getText());
                 }
             }
         }

@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Fields defined in the manifest "package" header
  */
-public enum PackageHeaderField {
+public enum PackageHeader {
     NAME("name") {
         @Override
         void setValueString(Manifest manifest, TomlParser.KeyvalContext ctx) {
@@ -90,10 +90,8 @@ public enum PackageHeaderField {
         @Override
         void setValueArray(Manifest manifest, TomlParser.ArrayValuesContext ctx) {
             List<String> arrayElements = new ArrayList<>();
-            if (ctx.arrayvalsNonEmpty().size() > 0) {
-                for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
-                    arrayElements.add(valueContext.getText());
-                }
+            for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
+                arrayElements.add(valueContext.getText());
             }
             manifest.setAuthors(arrayElements);
         }
@@ -103,19 +101,17 @@ public enum PackageHeaderField {
         @Override
         void setValueArray(Manifest manifest, TomlParser.ArrayValuesContext ctx) {
             List<String> arrayElements = new ArrayList<>();
-            if (ctx.arrayvalsNonEmpty().size() > 0) {
-                for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
-                    arrayElements.add(valueContext.getText());
-                }
+            for (TomlParser.ArrayvalsNonEmptyContext valueContext : ctx.arrayvalsNonEmpty()) {
+                arrayElements.add(valueContext.getText());
             }
             manifest.setKeywords(arrayElements);
         }
     };
 
-    public static final Map<String, PackageHeaderField> lookup = new HashMap<>();
+    public static final Map<String, PackageHeader> lookup = new HashMap<>();
 
     static {
-        for (PackageHeaderField packageHeaderField : PackageHeaderField.values()) {
+        for (PackageHeader packageHeaderField : PackageHeader.values()) {
             lookup.put(packageHeaderField.getName(), packageHeaderField);
         }
     }
@@ -127,17 +123,17 @@ public enum PackageHeaderField {
      *
      * @param name field name
      */
-    PackageHeaderField(String name) {
+    PackageHeader(String name) {
         this.name = name;
     }
 
     /**
-     * Get the PackageHeaderField related to the field name
+     * Get the PackageHeader related to the field name
      *
      * @param abbreviation
-     * @return PackageHeaderField object
+     * @return PackageHeader object
      */
-    public static PackageHeaderField get(String abbreviation) {
+    public static PackageHeader get(String abbreviation) {
         return lookup.get(abbreviation);
     }
 
