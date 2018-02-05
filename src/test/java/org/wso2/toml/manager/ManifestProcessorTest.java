@@ -21,42 +21,42 @@ public class ManifestProcessorTest {
 
     @Test(description = "Package name in package section has an effect")
     public void testPackageName() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "#Name of the package \n name = \"org-name/string\"");
         Assert.assertEquals(manifest.getName(), "\"org-name/string\"");
     }
 
     @Test(description = "Attribute with single comment doesn't have an effect")
     public void testAttributeWithSingleComment() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "#Name of the package \n name = \"org-name/string\"");
         Assert.assertEquals(manifest.getName(), "\"org-name/string\"");
     }
 
     @Test(description = "Attribute with multiline comments doesn't have an effect")
     public void testAttributeWithMultilineComments() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "# Name of the package \n #This is the package congif section \n name = \"org-name/string\"");
         Assert.assertEquals(manifest.getName(), "\"org-name/string\"");
     }
 
     @Test(description = "Key with special characters in package section has no effect")
     public void testPackageNameWithSpecialCharacters() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "name-value = \"org-name/string\"");
         Assert.assertNotEquals(null, "\"org-name/string\"");
     }
 
     @Test(description = "Version in package section has an effect")
     public void testVersion() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package]\n" +
+        Manifest manifest = parseTomlContentFromString("[package]\n" +
                 "version = \"v1\"");
         Assert.assertEquals(manifest.getVersion(), "\"v1\"");
     }
 
     @Test(description = "Authors in package section has an effect")
     public void testAuthors() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "authors = [\"tyler@wso2.com\",\"manu@wso2.com\"]");
         Assert.assertEquals(manifest.getAuthors().get(0), "\"tyler@wso2.com\"");
         Assert.assertEquals(manifest.getAuthors().get(1), "\"manu@wso2.com\"");
@@ -64,47 +64,47 @@ public class ManifestProcessorTest {
 
     @Test(description = "Description in package section has an effect")
     public void testDescription() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "description = \"This is a description about the package\"");
         Assert.assertEquals(manifest.getDescription(), "\"This is a description about the package\"");
     }
 
     @Test(description = "Documentation url in package section has an effect")
     public void testDocumentationURL() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n " +
+        Manifest manifest = parseTomlContentFromString("[package] \n " +
                 "documentation = \"https://ballerinalang.org/docs/api/0.95.5/\"");
         Assert.assertEquals(manifest.getDocumentationURL(), "\"https://ballerinalang.org/docs/api/0.95.5/\"");
     }
 
     @Test(description = "Homepage url in package section has an effect")
     public void testHomePageURL() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n " +
+        Manifest manifest = parseTomlContentFromString("[package] \n " +
                 "homepage = \"https://ballerinalang.org/\"");
         Assert.assertEquals(manifest.getHomepageURL(), "\"https://ballerinalang.org/\"");
     }
 
     @Test(description = "Repository url in package section has an effect")
     public void testRepositoryURL() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n " +
+        Manifest manifest = parseTomlContentFromString("[package] \n " +
                 "repository = \"https://github.com/ballerinalang/ballerina\"");
         Assert.assertEquals(manifest.getRepositoryURL(), "\"https://github.com/ballerinalang/ballerina\"");
     }
 
     @Test(description = "Version in non-package section has no effect")
     public void testVersionNeg() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[patch] \n version = \"v1\"");
+        Manifest manifest = parseTomlContentFromString("[patch] \n version = \"v1\"");
         Assert.assertNotEquals(manifest.getVersion(), "\"v1\"");
     }
 
     @Test(description = "Location in package section has no effect")
     public void testLocationNeg() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n location = \"local\"");
+        Manifest manifest = parseTomlContentFromString("[package] \n location = \"local\"");
         Assert.assertNotEquals(null, "\"local\"");
     }
 
     @Test(description = "Readme file path in package section has an effect")
     public void testReadmeFilePath() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n " +
+        Manifest manifest = parseTomlContentFromString("[package] \n " +
                 "readme = \"https://github.com/ballerinalang/composer/blob/master/README.md\"");
         Assert.assertEquals(manifest.getReadmeFilePath(), "\"https://github.com/ballerinalang/composer/blob" +
                 "/master/README.md\"");
@@ -112,7 +112,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Keywords in package section has an effect")
     public void testKeywords() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n" +
+        Manifest manifest = parseTomlContentFromString("[package] \n" +
                 "keywords=[\"ballerina\",\"security\",\"security\"]");
         Assert.assertEquals(manifest.getKeywords().get(0), "\"ballerina\"");
         Assert.assertEquals(manifest.getKeywords().get(1), "\"security\"");
@@ -121,14 +121,14 @@ public class ManifestProcessorTest {
 
     @Test(description = "Description in package section has an effect")
     public void testLicenseDescription() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[package] \n " +
+        Manifest manifest = parseTomlContentFromString("[package] \n " +
                 "license = \"MIT OR Apache-2.0\"");
         Assert.assertEquals(manifest.getLicense(), "\"MIT OR Apache-2.0\"");
     }
 
     @Test(description = "One dependancy added to the dependancies section has an effect")
     public void testSingleDependancies() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[dependencies] \n " +
+        Manifest manifest = parseTomlContentFromString("[dependencies] \n " +
                 "crates-io = { location = \"src/crates-io\",version = \"0.15\" } \n");
         Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates-io");
         Assert.assertEquals(manifest.getDependencies().get(0).getVersion(), "\"0.15\"");
@@ -137,7 +137,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Multiple dependancies added to the dependancies section has an effect")
     public void testMultipleDependancies() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[dependencies] \n " +
+        Manifest manifest = parseTomlContentFromString("[dependencies] \n " +
                 "crates-io = {location = \"src/crates-io\", version = \"0.15\" } \n " +
                 "jquery = { version = \"2.23\" } \n");
         Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates-io");
@@ -148,7 +148,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "One dependancy added to the dependancies section individually has an effect")
     public void testSingleDependanciesAddedIndividually() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[dependencies.crates.io] \n " +
+        Manifest manifest = parseTomlContentFromString("[dependencies.crates.io] \n " +
                 "version = \"0.15\" \n location = \"src/crates-io\"");
         Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates.io");
         Assert.assertEquals(manifest.getDependencies().get(0).getVersion(), "\"0.15\"");
@@ -157,7 +157,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Multiple dependencies added to the dependancies section individually has an effect")
     public void testMultipleDependanciesAddedIndividually() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[dependencies.crates.io] \n " +
+        Manifest manifest = parseTomlContentFromString("[dependencies.crates.io] \n " +
                 "version = \"0.15\" \n location = \"src/crates-io\" \n [dependencies.jquery] \n " +
                 "version = \"2.23\"");
 
@@ -172,7 +172,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "One patch added to the patches section has an effect")
     public void testSinglePatch() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[patches] \n " +
+        Manifest manifest = parseTomlContentFromString("[patches] \n " +
                 "crates-io = {version = \"0.16.1\", location = \"src/patches/crates-io\" } \n");
         Assert.assertEquals(manifest.getPatches().get(0).getPackageName(), "crates-io");
         Assert.assertEquals(manifest.getPatches().get(0).getVersion(), "\"0.16.1\"");
@@ -181,7 +181,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Multiple patches added to the patches section has an effect")
     public void testMultiplePatches() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[patches] \n " +
+        Manifest manifest = parseTomlContentFromString("[patches] \n " +
                 "crates-io = {version = \"0.15.2\" } \n " +
                 "jquery = { version = \"2.23.1\" } \n");
         Assert.assertEquals(manifest.getPatches().get(0).getPackageName(), "crates-io");
@@ -193,7 +193,7 @@ public class ManifestProcessorTest {
     @Test(description = "Dependencies added both ways i.e. individually and multiple dependencies together has" +
             "an effect")
     public void testMixtureOfDependencies() throws IOException {
-        Manifest manifest = ManfiestProcessor.parseTomlContent("[dependencies.crates.io] \n " +
+        Manifest manifest = parseTomlContentFromString("[dependencies.crates.io] \n " +
                 "version = \"0.15\" \n location = \"src/crates-io\" \n [dependencies] \n " +
                 "jquery = {version = \"2.23\"} \n react = {version = \"1.66\", location = \"npm-modules/react\"} \n" +
                 "[dependencies.toml] \n version = \"0.4.5\" \n ");
@@ -217,7 +217,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Test which covers all the attributes tested above")
     public void testTomlFile() throws IOException {
-        Manifest manifest = parseTomlContentFromFile(resource_dir + "example.toml");
+        Manifest manifest = ManfiestProcessor.parseTomlContent(resource_dir + "example.toml");
         Assert.assertEquals(manifest.getName(), "\"org-name/string\"");
         Assert.assertEquals(manifest.getVersion(), "\"1.0.0\"");
         Assert.assertEquals(manifest.getDescription(), "\"This is a sample description which contains information\"");
@@ -250,9 +250,15 @@ public class ManifestProcessorTest {
         Assert.assertEquals(manifest.getDependencies().get(5).getPackageName(), "jobapi.core");
     }
 
-    public static Manifest parseTomlContentFromFile(String fileName) throws IOException {
+    /**
+     * Parse toml content as string
+     * @param content string content
+     * @return manifest object
+     * @throws IOException
+     */
+    public static Manifest parseTomlContentFromString(String content) throws IOException {
         Manifest manifest = new Manifest();
-        CharStream in = CharStreams.fromFileName(fileName);
+        CharStream in = CharStreams.fromString(content);
         TomlLexer lexer = new TomlLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TomlParser parser = new TomlParser(tokens);

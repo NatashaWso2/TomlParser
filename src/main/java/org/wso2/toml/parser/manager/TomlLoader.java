@@ -9,20 +9,22 @@ import org.wso2.toml.parser.model.Dependency;
 import org.wso2.toml.parser.model.DependencyFields;
 import org.wso2.toml.parser.model.Headers;
 import org.wso2.toml.parser.model.Manifest;
-import org.wso2.toml.parser.model.ManifestFields;
+import org.wso2.toml.parser.model.PackageHeaderFields;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Custom listener which is extended from the Toml listener with our own custom logic
+ */
 public class TomlLoader extends TomlBaseListener {
     private final Manifest manifest;
-    List<String> packageAttributeList = Arrays.asList(ManifestFields.NAME.name(), ManifestFields.DESCRIPTION.name(),
-            ManifestFields.DOCUMENTATION.name(), ManifestFields.VERSION.name(), ManifestFields.HOMEPAGE.name(),
-            ManifestFields.README.name(), ManifestFields.REPOSITORY.name(), ManifestFields.LICENSE.name(),
-            ManifestFields.AUTHORS.name(), ManifestFields.KEYWORDS.name());
+    List<String> packageAttributeList = Arrays.asList(PackageHeaderFields.NAME.name(), PackageHeaderFields.DESCRIPTION.name(),
+            PackageHeaderFields.DOCUMENTATION.name(), PackageHeaderFields.VERSION.name(), PackageHeaderFields.HOMEPAGE.name(),
+            PackageHeaderFields.README.name(), PackageHeaderFields.REPOSITORY.name(), PackageHeaderFields.LICENSE.name(),
+            PackageHeaderFields.AUTHORS.name(), PackageHeaderFields.KEYWORDS.name());
     List<String> dependancyAttributeList = Arrays.asList(DependencyFields.NAME.name(), DependencyFields.VERSION.name(),
             DependencyFields.LOCATION.name());
     private Dependency dependency;
@@ -2098,6 +2100,9 @@ public class TomlLoader extends TomlBaseListener {
         super.visitErrorNode(node);
     }
 
+    /**
+     * Add the dependencies and patches to the manifest object
+     */
     public void setDependancyAndPatches() {
         if (headerProcessed.contains(Headers.DEPENDENCIES.getValue())) {
             this.manifest.addDependancy(dependency);
@@ -2106,10 +2111,15 @@ public class TomlLoader extends TomlBaseListener {
         }
     }
 
+    /**
+     * Add the key-value pairs specified in the toml file
+     *
+     * @param ctx KeyvalContext object
+     */
     public void addKeyValPair(TomlParser.KeyvalContext ctx) {
         if (headerProcessed.equals(Headers.PACKAGE.getValue())) {
             if (packageAttributeList.contains(keyProcessed.toUpperCase())) {
-                ManifestFields.valueOf(keyProcessed.toUpperCase()).setValue(this.manifest, ctx);
+                PackageHeaderFields.valueOf(keyProcessed.toUpperCase()).setValue(this.manifest, ctx);
             }
         } else if (headerProcessed.equals(Headers.DEPENDENCIES.getValue()) ||
                 headerProcessed.equals(Headers.PATCHES.getValue())) {
@@ -2119,18 +2129,28 @@ public class TomlLoader extends TomlBaseListener {
         }
     }
 
+    /**
+     * Add array elements to manifest object
+     *
+     * @param arrayValuesContext ArrayValuesContext object
+     */
     public void addArrayElements(TomlParser.ArrayValuesContext arrayValuesContext) {
-        List<Object> arrayElements = new ArrayList<>();
+        List<String> arrayElements = new ArrayList<>();
         if (arrayValuesContext.arrayvalsNonEmpty().size() > 0) {
             for (TomlParser.ArrayvalsNonEmptyContext valueContext : arrayValuesContext.arrayvalsNonEmpty()) {
                 arrayElements.add(valueContext.getText());
             }
         }
         if (packageAttributeList.contains(keyProcessed.toUpperCase())) {
-            ManifestFields.valueOf(keyProcessed.toUpperCase()).setArrayElements(this.manifest, arrayElements);
+            PackageHeaderFields.valueOf(keyProcessed.toUpperCase()).setArrayElements(this.manifest, arrayElements);
         }
     }
 
+    /**
+     * Add table headers in the toml file
+     *
+     * @param keyContextList list of keys specified in the header
+     */
     public void addHeader(List<TomlParser.KeyContext> keyContextList) {
         headerProcessed = keyContextList.get(0).getText();
 
@@ -2144,6 +2164,11 @@ public class TomlLoader extends TomlBaseListener {
         }
     }
 
+    /**
+     * Add inline table content specified
+     *
+     * @param ctx InlineTableKeyvalsContext object
+     */
     public void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
         // Add the package name
         dependency = new Dependency();

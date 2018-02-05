@@ -1,6 +1,8 @@
 package org.wso2.toml.parser.model;
 
-
+/**
+ * Dependency object fields
+ */
 public enum DependencyFields {
     NAME {
         @Override
@@ -24,6 +26,11 @@ public enum DependencyFields {
 
     };
 
+    /**
+     * Set values to the dependency object
+     * @param dependency
+     * @param value
+     */
     public abstract void setValue(Dependency dependency, String value);
 
 }

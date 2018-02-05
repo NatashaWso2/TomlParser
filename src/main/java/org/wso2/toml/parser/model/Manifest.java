@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Defines the manifest object which is created using the toml file configs
+ */
 public class Manifest {
     private String name;
     private String version;
-    private List<Object> authors;
-    private List<Object> keywords;
+    private List<String> authors;
+    private List<String> keywords;
     private String documentationURL;
     private String homepageURL;
     private String repositoryURL;
@@ -18,112 +21,230 @@ public class Manifest {
     private List<Dependency> dependencies = new ArrayList<>();
     private List<Dependency> patches = new ArrayList<>();
 
+    /**
+     * Get the patches list
+     *
+     * @return patches list
+     */
     public List<Dependency> getPatches() {
         return patches;
     }
 
-    public void setPatches(ArrayList<Dependency> patches) {
-        this.patches = patches;
-    }
-
+    /**
+     * Add a patch to the patches list
+     *
+     * @param dependency
+     */
     public void addPatches(Dependency dependency) {
         this.patches.add(dependency);
         patches = removeDuplicates(patches);
     }
 
+    /**
+     * Get the dependencies list
+     *
+     * @return dependencies list
+     */
     public List<Dependency> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(ArrayList<Dependency> dependencies) {
-        this.dependencies = dependencies;
-    }
-
+    /**
+     * Add a dependency to the dependencies list
+     *
+     * @param dependency
+     */
     public void addDependancy(Dependency dependency) {
         this.dependencies.add(dependency);
         dependencies = removeDuplicates(dependencies);
     }
 
-    public List<Object> getKeywords() {
+    /**
+     * Get keywords
+     *
+     * @return list of keywords
+     */
+    public List<String> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(List<Object> keywords) {
+    /**
+     * Set keywords list
+     *
+     * @param keywords
+     */
+    public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
     }
 
+    /**
+     * Get file path of the readme file
+     *
+     * @return file path of the readme file
+     */
     public String getReadmeFilePath() {
         return readmeFilePath;
     }
 
+    /**
+     * Set file path of the readme file
+     *
+     * @param readmeFilePath
+     */
     public void setReadmeFilePath(String readmeFilePath) {
         this.readmeFilePath = readmeFilePath;
     }
 
+    /**
+     * Get documentation URL
+     *
+     * @return documentation URL
+     */
     public String getDocumentationURL() {
         return documentationURL;
     }
 
+    /**
+     * Set documentation URL
+     *
+     * @param documentationURL
+     */
     public void setDocumentationURL(String documentationURL) {
         this.documentationURL = documentationURL;
     }
 
+    /**
+     * Get homepage URL
+     *
+     * @return homepage URL
+     */
     public String getHomepageURL() {
         return homepageURL;
     }
 
+    /**
+     * Set homepage URL
+     *
+     * @param homepageURL
+     */
     public void setHomepageURL(String homepageURL) {
         this.homepageURL = homepageURL;
     }
 
+    /**
+     * Get repository URL
+     *
+     * @return repository URL
+     */
     public String getRepositoryURL() {
         return repositoryURL;
     }
 
+    /**
+     * Set the repository URL
+     *
+     * @param repositoryURL
+     */
     public void setRepositoryURL(String repositoryURL) {
         this.repositoryURL = repositoryURL;
     }
 
+    /**
+     * Get description
+     *
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Set the description
+     *
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public List<Object> getAuthors() {
+    /**
+     * Get authors of the toml file
+     *
+     * @return authors
+     */
+    public List<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Object> arrayElements) {
+    /**
+     * Set authors of the toml file
+     *
+     * @param arrayElements
+     */
+    public void setAuthors(List<String> arrayElements) {
         this.authors = arrayElements;
     }
 
+    /**
+     * Get the package name
+     *
+     * @return package name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the package name
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the version
+     *
+     * @return version
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * Set the version
+     *
+     * @param version
+     */
     public void setVersion(String version) {
         this.version = version;
     }
 
+    /**
+     * Get the license
+     *
+     * @return license
+     */
     public String getLicense() {
         return license;
     }
 
+    /**
+     * Set the license
+     *
+     * @param license
+     */
     public void setLicense(String license) {
         this.license = license;
     }
 
+    /**
+     * Remove duplicates from dependencies and patches list
+     *
+     * @param list
+     * @return dependencies or patches list without duplicates
+     */
     public List<Dependency> removeDuplicates(List<Dependency> list) {
         return list.stream().distinct().collect(Collectors.toList());
     }

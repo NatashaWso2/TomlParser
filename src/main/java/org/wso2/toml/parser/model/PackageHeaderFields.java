@@ -5,7 +5,10 @@ import org.wso2.toml.parser.antlr4.TomlParser;
 
 import java.util.List;
 
-public enum ManifestFields {
+/**
+ * Fields defined in the manifest "package" header
+ */
+public enum PackageHeaderFields {
     NAME {
         @Override
         public void setValue(Manifest manifest, TomlParser.KeyvalContext ctx) {
@@ -13,7 +16,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -25,7 +28,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -37,7 +40,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -49,7 +52,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -61,7 +64,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -73,7 +76,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -85,7 +88,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -97,7 +100,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
 
         }
     },
@@ -108,7 +111,7 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
             manifest.setAuthors(elementList);
         }
     },
@@ -119,12 +122,22 @@ public enum ManifestFields {
         }
 
         @Override
-        public void setArrayElements(Manifest manifest, List<Object> elementList) {
+        public void setArrayElements(Manifest manifest, List<String> elementList) {
             manifest.setKeywords(elementList);
         }
     };
 
+    /**
+     * Set the value to the manifest object
+     * @param manifest
+     * @param ctx
+     */
     public abstract void setValue(Manifest manifest, TomlParser.KeyvalContext ctx);
 
-    public abstract void setArrayElements(Manifest manifest, List<Object> elementList);
+    /**
+     * Set array elements to the manifest object
+     * @param manifest
+     * @param elementList
+     */
+    public abstract void setArrayElements(Manifest manifest, List<String> elementList);
 }

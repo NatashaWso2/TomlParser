@@ -11,35 +11,20 @@ import org.wso2.toml.parser.model.Manifest;
 
 import java.io.IOException;
 
+/**
+ * Manifest Processor which processes the toml file parsed and populate the Manifest POJO
+ */
 public class ManfiestProcessor {
-    /*public static void main(String[] args) {
-        Manifest manifest = new Manifest();
-
-        CharStream in = CharStreams.fromString("[\"header\"]\n" +
-                " key5={dsdsa=\"sadad\"};");
-        TomlLexer lexer = new TomlLexer(in);
-
-        // Get a list of matched tokens
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        // Pass the tokens to the parser
-        TomlParser parser = new TomlParser(tokens);
-
-        // Specify the entry point
-        ParseTree tree = parser.toml();
-        List<Token> tokens1 = tokens.getTokens();
-        for (Token token : tokens1) {
-            System.out.println(token.getText() + " = "+token.getType());
-//            System.out.println(lexer.getRuleNames()[token.getType()]);
-//            System.out.println();
-        }
-
-        System.out.println(tree.toStringTree(parser));
-    }*/
+    /**
+     * Generates the Manifest object by parsing the toml config file
+     * @param fileName toml file name
+     * @return manifest object
+     * @throws IOException
+     */
     public static Manifest parseTomlContent(String fileName) throws IOException {
         Manifest manifest = new Manifest();
 
-        CharStream in = CharStreams.fromString(fileName);
+        CharStream in = CharStreams.fromFileName(fileName);
         TomlLexer lexer = new TomlLexer(in);
 
         // Get a list of matched tokens
