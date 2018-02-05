@@ -1,7 +1,8 @@
 grammar Toml;
 toml : expression ( newline expression )*;
 
-ALPHA : ([A-Z])* | ([a-z])*;
+ALPHA : [A-Z] | [a-z];
+alpha : ALPHA | TRUE | FALSE | NAN | INF | E | UPPERCASE_T | LOWERCASE_T | UPPERCASE_Z;
 SPACE : ' ';
 HYPHEN : '-';
 PERIOD : '.';
@@ -15,9 +16,9 @@ EQUALS : '=';
 HASH : '#';
 
 expression
-           : ws comment?
-           | ws keyval ws comment?
-           | ws table ws comment?;
+           : ws
+           | ws keyval ws
+           | ws table ws;
 
 // Whitespace
 
@@ -30,17 +31,14 @@ newline : '\n' | '\r\n';
 
 // Comment
 
-commentStartSymbol : HASH;
-nonEol :  '\r'| '\t';
-
-comment :  commentStartSymbol wsCommentNewline basicChar* nonEol*;
+COMMENT : '#' .*? ('\n' | '\r' | '\t') -> channel(2) ;
 
 //Key-Value pairs
 
 keyval : key keyvalSep val;
 
 key : unquotedKey | quotedKey;
-unquotedKey : ( ALPHA | DIGIT | HYPHEN | UNDERSCORE )* ;
+unquotedKey : ( alpha | DIGIT | HYPHEN | UNDERSCORE )* ;
 quotedKey : basicString | literalString;
 
 keyvalSep : ws EQUALS ws ;
@@ -57,7 +55,7 @@ basicString : QUOTATION_MARK basicChar* QUOTATION_MARK;
 
 
 
-basicChar : escaped | ALPHA | BASICUNESCPAED | SPACE | PLUS | HYPHEN | PERIOD | UNDERSCORE | COLON | COMMA
+basicChar : escaped | alpha | BASICUNESCPAED | SPACE | PLUS | HYPHEN | PERIOD | UNDERSCORE | COLON | COMMA
             | SLASH | APOSTROPHE| EQUALS | HASH;
 
 
@@ -182,18 +180,16 @@ localTime : partialTime;
 
 // Array
 
-array : arrayOpen arrayValues wsCommentNewline arrayClose;
+array : arrayOpen arrayValues ws arrayClose;
 
 arrayOpen  : '[';
 arrayClose : ']';
 
-arrayValues : wsCommentNewline arrayvalsNonEmpty (arraySep wsCommentNewline arrayvalsNonEmpty)*;
+arrayValues : ws arrayvalsNonEmpty (arraySep ws arrayvalsNonEmpty)*;
 
 arrayvalsNonEmpty : val ws ;
 
 arraySep : COMMA;
-
-wsCommentNewline : ( wschar | comment? newline )*;
 
 // Table
 
@@ -209,13 +205,13 @@ tableKeySep   : PERIOD;
 
 // Inline Table
 
-inlineTable : inlineTableOpen inlineTableKeyvals wsCommentNewline inlineTableClose;
+inlineTable : inlineTableOpen inlineTableKeyvals ws inlineTableClose;
 
 inlineTableOpen     : '{';
 inlineTableClose    : '}';
 inlineTableSep      : ',';
 
-inlineTableKeyvals :  wsCommentNewline inlineTableKeyvalsNonEmpty (inlineTableSep wsCommentNewline inlineTableKeyvalsNonEmpty)* ;
+inlineTableKeyvals :  ws inlineTableKeyvalsNonEmpty (inlineTableSep ws inlineTableKeyvalsNonEmpty)* ;
 inlineTableKeyvalsNonEmpty : key keyvalSep val ;
 
 // Array Table

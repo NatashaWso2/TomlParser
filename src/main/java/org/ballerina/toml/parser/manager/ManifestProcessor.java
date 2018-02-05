@@ -1,0 +1,85 @@
+/*
+ *  Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.ballerina.toml.parser.manager;
+
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.ballerina.toml.parser.antlr4.TomlLexer;
+import org.ballerina.toml.parser.antlr4.TomlParser;
+import org.ballerina.toml.parser.model.Manifest;
+
+import java.io.IOException;
+
+/**
+ * Manifest Processor which processes the toml file parsed and populate the Manifest POJO
+ */
+public class ManifestProcessor {
+
+    /**
+     * Get the char stream of the content from file
+     *
+     * @param fileName
+     * @return charstream object
+     * @throws IOException
+     */
+    public static Manifest parseTomlContentFromFile(String fileName) throws IOException {
+        CharStream in = CharStreams.fromFileName(fileName);
+        return parseTomlContent(in);
+    }
+
+    /**
+     * Get the char stream from string content
+     *
+     * @param content
+     * @return charstream object
+     * @throws IOException
+     */
+    public static Manifest parseTomlContentFromString(String content) throws IOException {
+        CharStream in = CharStreams.fromString(content);
+        return parseTomlContent(in);
+    }
+
+    /**
+     * Generate the manifest object by passing in the toml file
+     *
+     * @param stream charstream object containing the content
+     * @return manifest object
+     * @throws IOException
+     */
+    public static Manifest parseTomlContent(CharStream stream) throws IOException {
+        Manifest manifest = new Manifest();
+        TomlLexer lexer = new TomlLexer(stream);
+
+        // Get a list of matched tokens
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // Pass the tokens to the parser
+        TomlParser parser = new TomlParser(tokens);
+        ParseTree tree = parser.toml();
+
+        // Walk it and attach our listener
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(new TomlCustomListener(manifest), tree);
+        System.out.println(tree.toStringTree(parser));
+        return manifest;
+
+    }
+}

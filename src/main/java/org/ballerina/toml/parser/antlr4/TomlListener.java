@@ -1,5 +1,5 @@
 // Generated from Toml.g4 by ANTLR 4.7.1
-package org.wso2.toml.parser.antlr4;
+package org.ballerina.toml.parser.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -17,6 +17,16 @@ public interface TomlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitToml(TomlParser.TomlContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TomlParser#alpha}.
+	 * @param ctx the parse tree
+	 */
+	void enterAlpha(TomlParser.AlphaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TomlParser#alpha}.
+	 * @param ctx the parse tree
+	 */
+	void exitAlpha(TomlParser.AlphaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TomlParser#expression}.
 	 * @param ctx the parse tree
@@ -57,36 +67,6 @@ public interface TomlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNewline(TomlParser.NewlineContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TomlParser#commentStartSymbol}.
-	 * @param ctx the parse tree
-	 */
-	void enterCommentStartSymbol(TomlParser.CommentStartSymbolContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#commentStartSymbol}.
-	 * @param ctx the parse tree
-	 */
-	void exitCommentStartSymbol(TomlParser.CommentStartSymbolContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TomlParser#nonEol}.
-	 * @param ctx the parse tree
-	 */
-	void enterNonEol(TomlParser.NonEolContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#nonEol}.
-	 * @param ctx the parse tree
-	 */
-	void exitNonEol(TomlParser.NonEolContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TomlParser#comment}.
-	 * @param ctx the parse tree
-	 */
-	void enterComment(TomlParser.CommentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#comment}.
-	 * @param ctx the parse tree
-	 */
-	void exitComment(TomlParser.CommentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TomlParser#keyval}.
 	 * @param ctx the parse tree
@@ -697,16 +677,6 @@ public interface TomlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArraySep(TomlParser.ArraySepContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TomlParser#wsCommentNewline}.
-	 * @param ctx the parse tree
-	 */
-	void enterWsCommentNewline(TomlParser.WsCommentNewlineContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TomlParser#wsCommentNewline}.
-	 * @param ctx the parse tree
-	 */
-	void exitWsCommentNewline(TomlParser.WsCommentNewlineContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TomlParser#table}.
 	 * @param ctx the parse tree

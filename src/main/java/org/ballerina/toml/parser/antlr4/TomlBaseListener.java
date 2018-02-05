@@ -1,5 +1,5 @@
 // Generated from Toml.g4 by ANTLR 4.7.1
-package org.wso2.toml.parser.antlr4;
+package org.ballerina.toml.parser.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -23,6 +23,18 @@ public class TomlBaseListener implements TomlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitToml(TomlParser.TomlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAlpha(TomlParser.AlphaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAlpha(TomlParser.AlphaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -71,42 +83,6 @@ public class TomlBaseListener implements TomlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNewline(TomlParser.NewlineContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCommentStartSymbol(TomlParser.CommentStartSymbolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCommentStartSymbol(TomlParser.CommentStartSymbolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNonEol(TomlParser.NonEolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNonEol(TomlParser.NonEolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterComment(TomlParser.CommentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitComment(TomlParser.CommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -839,18 +815,6 @@ public class TomlBaseListener implements TomlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArraySep(TomlParser.ArraySepContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterWsCommentNewline(TomlParser.WsCommentNewlineContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitWsCommentNewline(TomlParser.WsCommentNewlineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
