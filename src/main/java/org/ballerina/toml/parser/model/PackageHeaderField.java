@@ -154,11 +154,13 @@ public enum PackageHeaderField {
      * Generic method to set the value based on whether its a single value or an array of elements
      */
     public void setValue(Manifest manifest, ParserRuleContext ctx) {
-        if (ctx instanceof TomlParser.KeyvalContext &&
-                !(((TomlParser.KeyvalContext) ctx).val().array() instanceof TomlParser.ArrayContext)) {
-            setValueString(manifest, (TomlParser.KeyvalContext) ctx);
-        } else if (ctx instanceof TomlParser.ArrayValuesContext) {
-            setValueArray(manifest, (TomlParser.ArrayValuesContext) ctx);
+        if (ctx != null) {
+            if (ctx instanceof TomlParser.KeyvalContext &&
+                    !(((TomlParser.KeyvalContext) ctx).val().array() instanceof TomlParser.ArrayContext)) {
+                setValueString(manifest, (TomlParser.KeyvalContext) ctx);
+            } else if (ctx instanceof TomlParser.ArrayValuesContext) {
+                setValueArray(manifest, (TomlParser.ArrayValuesContext) ctx);
+            }
         }
     }
 

@@ -186,11 +186,13 @@ public class TomlCustomListener extends TomlBaseListener {
         // Add the package name
         dependency = new Dependency();
         DependencyField.get(DependencyField.NAME.getName()).setValue(dependency, keyProcessed);
-        if (ctx.inlineTableKeyvalsNonEmpty().size() > 0) {
-            for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
-                String name = valueContext.key().getText();
-                if (dependancyAttributeList.contains(name)) {
-                    DependencyField.get(name).setValue(dependency, valueContext.val().getText());
+        if (ctx != null) {
+            if (ctx.inlineTableKeyvalsNonEmpty().size() > 0) {
+                for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
+                    String name = valueContext.key().getText();
+                    if (dependancyAttributeList.contains(name)) {
+                        DependencyField.get(name).setValue(dependency, valueContext.val().getText());
+                    }
                 }
             }
         }

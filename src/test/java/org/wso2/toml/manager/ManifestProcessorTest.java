@@ -68,6 +68,13 @@ public class ManifestProcessorTest {
         Assert.assertEquals(manifest.getAuthors().get(1), "\"manu@wso2.com\"");
     }
 
+    @Test(description = "Empty author array in package section has an effect")
+    public void testEmptyAuthorArray() throws IOException {
+        Manifest manifest = ManifestProcessor.parseTomlContentFromString("[package] \n" +
+                "authors = []");
+        Assert.assertEquals(manifest.getAuthors(), null);
+    }
+
     @Test(description = "Description in package section has an effect")
     public void testDescription() throws IOException {
         Manifest manifest = ManifestProcessor.parseTomlContentFromString("[package] \n" +
@@ -139,6 +146,13 @@ public class ManifestProcessorTest {
         Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates-io");
         Assert.assertEquals(manifest.getDependencies().get(0).getVersion(), "\"0.15\"");
         Assert.assertEquals(manifest.getDependencies().get(0).getLocation(), "\"src/crates-io\"");
+    }
+
+    @Test(description = "Empty dependancy added to the dependancies section has no effect")
+    public void testSingleEmptyDependancies() throws IOException {
+        Manifest manifest = ManifestProcessor.parseTomlContentFromString("[dependencies] \n " +
+                "crates-io = {} \n");
+        Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates-io");
     }
 
     @Test(description = "Multiple dependancies added to the dependancies section has an effect")

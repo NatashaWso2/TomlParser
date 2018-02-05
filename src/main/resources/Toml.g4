@@ -180,7 +180,7 @@ localTime : partialTime;
 
 // Array
 
-array : arrayOpen arrayValues ws arrayClose;
+array : arrayOpen arrayValues? ws arrayClose;
 
 arrayOpen  : '[';
 arrayClose : ']';
@@ -205,7 +205,7 @@ tableKeySep   : PERIOD;
 
 // Inline Table
 
-inlineTable : inlineTableOpen inlineTableKeyvals ws inlineTableClose;
+inlineTable : inlineTableOpen inlineTableKeyvals? ws inlineTableClose;
 
 inlineTableOpen     : '{';
 inlineTableClose    : '}';
