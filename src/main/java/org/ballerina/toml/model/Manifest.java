@@ -15,7 +15,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.ballerina.toml.parser.model;
+package org.ballerina.toml.model;
 
 import java.util.ArrayList;
 import java.util.List;

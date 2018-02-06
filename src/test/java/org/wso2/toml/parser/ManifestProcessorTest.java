@@ -15,10 +15,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wso2.toml.manager;
+package org.wso2.toml.parser;
 
-import org.ballerina.toml.parser.manager.ManifestProcessor;
-import org.ballerina.toml.parser.model.Manifest;
+import org.ballerina.toml.parser.ManifestProcessor;
+import org.ballerina.toml.model.Manifest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -72,7 +72,7 @@ public class ManifestProcessorTest {
     public void testEmptyAuthorArray() throws IOException {
         Manifest manifest = ManifestProcessor.parseTomlContentFromString("[package] \n" +
                 "authors = []");
-        Assert.assertEquals(manifest.getAuthors(), null);
+        Assert.assertEquals(manifest.getAuthors().size(), 0);
     }
 
     @Test(description = "Description in package section has an effect")

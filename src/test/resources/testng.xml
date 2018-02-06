@@ -22,7 +22,7 @@ under the License.
 <suite name="flexmark-test-suite">
     <test name="flexmark-test-suite" preserve-order="true" parallel="false">
         <packages>
-            <package name="org.ballerina.toml.manager"/>
+            <package name="org.ballerina.toml.parser"/>
         </packages>
     </test>
 </suite>

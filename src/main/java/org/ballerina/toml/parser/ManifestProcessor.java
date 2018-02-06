@@ -15,16 +15,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.ballerina.toml.parser.manager;
+package org.ballerina.toml.parser;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.ballerina.toml.parser.antlr4.TomlLexer;
-import org.ballerina.toml.parser.antlr4.TomlParser;
-import org.ballerina.toml.parser.model.Manifest;
+import org.ballerina.toml.antlr4.TomlLexer;
+import org.ballerina.toml.antlr4.TomlParser;
+import org.ballerina.toml.model.Manifest;
 
 import java.io.IOException;
 
@@ -64,7 +64,7 @@ public class ManifestProcessor {
      * @return manifest object
      * @throws IOException
      */
-    public static Manifest parseTomlContent(CharStream stream) throws IOException {
+    private static Manifest parseTomlContent(CharStream stream) throws IOException {
         Manifest manifest = new Manifest();
         TomlLexer lexer = new TomlLexer(stream);
 
@@ -77,7 +77,7 @@ public class ManifestProcessor {
 
         // Walk it and attach our listener
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new TomlCustomListener(manifest), tree);
+        walker.walk(new ManifestBuildListener(manifest), tree);
         System.out.println(tree.toStringTree(parser));
         return manifest;
 

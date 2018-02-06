@@ -15,33 +15,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.ballerina.toml.parser.model;
+package org.ballerina.toml.model.fields;
 
 /**
- * Headers defined in the toml file
+ * Section defined in the toml file
  */
-public enum Headers {
-    PACKAGE("package"),
-    DEPENDENCIES("dependencies"),
-    PATCHES("patches");
-
-    private String value;
+public enum Section {
+    PACKAGE, DEPENDENCIES, PATCHES;
 
     /**
-     * Constructor
+     * Check if the section header matches the toml header
      *
-     * @param value
+     * @param match section header in the toml file
+     * @return if it matches or not
      */
-    Headers(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Get value of the toml headers
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    public boolean stringEquals(String match) {
+        return toString().toLowerCase().equals(match);
     }
 }

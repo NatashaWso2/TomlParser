@@ -15,10 +15,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wso2.toml.manager;
+package org.wso2.toml.parser;
 
-import org.ballerina.toml.parser.manager.ManifestProcessor;
-import org.ballerina.toml.parser.model.Manifest;
+import org.ballerina.toml.parser.ManifestProcessor;
+import org.ballerina.toml.model.Manifest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
