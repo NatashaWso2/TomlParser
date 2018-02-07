@@ -50,7 +50,7 @@ public class Manifest {
     /**
      * Add a patch to the patches list
      *
-     * @param dependency
+     * @param dependency dependency object
      */
     public void addPatches(Dependency dependency) {
         this.patches.add(dependency);
@@ -69,7 +69,7 @@ public class Manifest {
     /**
      * Add a dependency to the dependencies list
      *
-     * @param dependency
+     * @param dependency dependency object
      */
     public void addDependancy(Dependency dependency) {
         this.dependencies.add(dependency);
@@ -88,7 +88,7 @@ public class Manifest {
     /**
      * Set keywords list
      *
-     * @param keywords
+     * @param keywords keyword list
      */
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
@@ -106,7 +106,7 @@ public class Manifest {
     /**
      * Set file path of the readme file
      *
-     * @param readmeFilePath
+     * @param readmeFilePath file path of the readme file
      */
     public void setReadmeFilePath(String readmeFilePath) {
         this.readmeFilePath = readmeFilePath;
@@ -124,7 +124,7 @@ public class Manifest {
     /**
      * Set documentation URL
      *
-     * @param documentationURL
+     * @param documentationURL documentation URL
      */
     public void setDocumentationURL(String documentationURL) {
         this.documentationURL = documentationURL;
@@ -142,7 +142,7 @@ public class Manifest {
     /**
      * Set homepage URL
      *
-     * @param homepageURL
+     * @param homepageURL homepage URL
      */
     public void setHomepageURL(String homepageURL) {
         this.homepageURL = homepageURL;
@@ -160,7 +160,7 @@ public class Manifest {
     /**
      * Set the repository URL
      *
-     * @param repositoryURL
+     * @param repositoryURL repository URL
      */
     public void setRepositoryURL(String repositoryURL) {
         this.repositoryURL = repositoryURL;
@@ -178,7 +178,7 @@ public class Manifest {
     /**
      * Set the description
      *
-     * @param description
+     * @param description description about the package
      */
     public void setDescription(String description) {
         this.description = description;
@@ -196,10 +196,10 @@ public class Manifest {
     /**
      * Set authors of the toml file
      *
-     * @param arrayElements
+     * @param authors list of authors
      */
-    public void setAuthors(List<String> arrayElements) {
-        this.authors = arrayElements;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
     /**
@@ -214,7 +214,7 @@ public class Manifest {
     /**
      * Set the package name
      *
-     * @param name
+     * @param name package name
      */
     public void setName(String name) {
         this.name = name;
@@ -232,7 +232,7 @@ public class Manifest {
     /**
      * Set the version
      *
-     * @param version
+     * @param version version of the package
      */
     public void setVersion(String version) {
         this.version = version;
@@ -250,7 +250,7 @@ public class Manifest {
     /**
      * Set the license
      *
-     * @param license
+     * @param license license
      */
     public void setLicense(String license) {
         this.license = license;
@@ -259,10 +259,10 @@ public class Manifest {
     /**
      * Remove duplicates from dependencies and patches list
      *
-     * @param list
+     * @param list list of elements
      * @return dependencies or patches list without duplicates
      */
-    public List<Dependency> removeDuplicates(List<Dependency> list) {
+    private List<Dependency> removeDuplicates(List<Dependency> list) {
         return list.stream().distinct().collect(Collectors.toList());
     }
 }

@@ -42,10 +42,6 @@ public enum PackageField {
 
     public static final Map<String, PackageField> LOOKUP = new HashMap<>();
 
-    /**
-     * We need to lookup package fields by lowercase.
-     * Populate the map with the package fields and the package name
-     */
     static {
         for (PackageField packageFieldField : PackageField.values()) {
             LOOKUP.put(packageFieldField.name().toLowerCase(), packageFieldField);
@@ -58,7 +54,7 @@ public enum PackageField {
     /**
      * Constructor which sets the string value
      *
-     * @param stringSetter
+     * @param stringSetter value to be set
      */
     PackageField(BiConsumer<Manifest, String> stringSetter) {
         this(stringSetter, null);

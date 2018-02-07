@@ -36,9 +36,9 @@ public class ManifestProcessor {
     /**
      * Get the char stream of the content from file
      *
-     * @param fileName
+     * @param fileName path of the toml file
      * @return charstream object
-     * @throws IOException
+     * @throws IOException exception if the file cannot be found
      */
     public static Manifest parseTomlContentFromFile(String fileName) throws IOException {
         CharStream in = CharStreams.fromFileName(fileName);
@@ -48,11 +48,10 @@ public class ManifestProcessor {
     /**
      * Get the char stream from string content
      *
-     * @param content
+     * @param content toml file content as a string
      * @return charstream object
-     * @throws IOException
      */
-    public static Manifest parseTomlContentFromString(String content) throws IOException {
+    public static Manifest parseTomlContentFromString(String content) {
         CharStream in = CharStreams.fromString(content);
         return parseTomlContent(in);
     }
@@ -62,9 +61,8 @@ public class ManifestProcessor {
      *
      * @param stream charstream object containing the content
      * @return manifest object
-     * @throws IOException
      */
-    private static Manifest parseTomlContent(CharStream stream) throws IOException {
+    private static Manifest parseTomlContent(CharStream stream){
         Manifest manifest = new Manifest();
         TomlLexer lexer = new TomlLexer(stream);
 

@@ -44,7 +44,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      *
      * @param manifest manifest object
      */
-    public ManifestBuildListener(Manifest manifest) {
+    ManifestBuildListener(Manifest manifest) {
         this.manifest = manifest;
     }
 
@@ -183,7 +183,7 @@ public class ManifestBuildListener extends TomlBaseListener {
     /**
      * Populate list values
      *
-     * @param arrayValuesContext
+     * @param arrayValuesContext array values
      * @return list of strings
      */
     private List<String> populateList(TomlParser.ArrayValuesContext arrayValuesContext) {
@@ -270,10 +270,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      * @return true if the key is there else false
      */
     private boolean hasKey() {
-        if (currentKey != null) {
-            return true;
-        }
-        return false;
+        return currentKey != null;
     }
 
     /**

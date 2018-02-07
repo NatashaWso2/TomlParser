@@ -37,7 +37,7 @@ public class Dependency {
     /**
      * Set the package name
      *
-     * @param packageName
+     * @param packageName name of the dependancy
      */
     public void setPackageName(String packageName) {
         this.packageName = packageName;
@@ -46,7 +46,7 @@ public class Dependency {
     /**
      * Get version of the dependency
      *
-     * @return
+     * @return version of the dependency
      */
     public String getVersion() {
         return version;
@@ -55,7 +55,7 @@ public class Dependency {
     /**
      * Set the version of the dependency
      *
-     * @param version
+     * @param version version of the dependency
      */
     public void setVersion(String version) {
         this.version = version;
@@ -64,7 +64,7 @@ public class Dependency {
     /**
      * Get the path/location of the dependency
      *
-     * @return
+     * @return location of the dependency
      */
     public String getLocation() {
         return location;
@@ -73,7 +73,7 @@ public class Dependency {
     /**
      * Set the path/location of the dependency
      *
-     * @param location
+     * @param location location of the dependency
      */
     public void setLocation(String location) {
         this.location = location;

@@ -33,9 +33,6 @@ public enum DependencyField {
 
     public static final Map<String, DependencyField> lookup = new HashMap<>();
 
-    /**
-     *  Populate the map with the dependency fields and the their names
-     */
     static {
         for (DependencyField dependencyField : DependencyField.values()) {
             lookup.put(dependencyField.name().toLowerCase(), dependencyField);
@@ -56,8 +53,8 @@ public enum DependencyField {
     /**
      * Set values to the dependency object
      *
-     * @param dependency
-     * @param value
+     * @param dependency dependency object
+     * @param value value to be set
      */
     public void setValueTo(Dependency dependency, String value) {
         stringSetter.accept(dependency, value);

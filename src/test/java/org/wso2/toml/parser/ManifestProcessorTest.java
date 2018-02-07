@@ -48,7 +48,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Key with special characters in package section has no effect")
     public void testPackageNameWithSpecialCharacters() throws IOException {
-        Manifest manifest = ManifestProcessor.parseTomlContentFromString("[package] \n" +
+        ManifestProcessor.parseTomlContentFromString("[package] \n" +
                 "name-value = \"org-name/string\"");
         Assert.assertNotEquals(null, "\"org-name/string\"");
     }
@@ -111,7 +111,7 @@ public class ManifestProcessorTest {
 
     @Test(description = "Location in package section has no effect")
     public void testLocationNeg() throws IOException {
-        Manifest manifest = ManifestProcessor.parseTomlContentFromString("[package] \n location = \"local\"");
+        ManifestProcessor.parseTomlContentFromString("[package] \n location = \"local\"");
         Assert.assertNotEquals(null, "\"local\"");
     }
 

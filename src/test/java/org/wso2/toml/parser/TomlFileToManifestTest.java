@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 public class TomlFileToManifestTest {
-    static final String userDir = System.getProperty("user.dir");
-    static final String resource_dir = userDir + "/src/test/resources/";
+    private static final String userDir = System.getProperty("user.dir");
+    private static final String resource_dir = userDir + "/src/test/resources/";
 
     @Test(description = "Test which covers all the attributes tested above")
     public void testTomlFile() throws IOException {
