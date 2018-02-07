@@ -234,4 +234,24 @@ public class ManifestProcessorTest {
         Assert.assertEquals(manifest.getDependencies().get(3).getPackageName(), "toml");
         Assert.assertEquals(manifest.getDependencies().get(3).getVersion(), "\"0.4.5\"");
     }
+
+    @Test(description = "Dependencies and patches added together has an effect")
+    public void testDependenciesAndPatches() throws IOException {
+        Manifest manifest = ManifestProcessor.parseTomlContentFromString("[dependencies.crates.io] \n " +
+                "version = \"0.15\" \n location = \"src/crates-io\" \n [patches] \n jobapi = {version = \"2.23\"} \n " +
+                " [dependencies] \n jquery = {version = \"2.23\"} \n react = {version = \"1.66\", " +
+                "location = \"npm-modules/react\"} \n [patches.toml] \n version = \"0.4.5\" \n");
+
+        Assert.assertEquals(manifest.getDependencies().size(), 3);
+        Assert.assertEquals(manifest.getPatches().size(), 2);
+
+        Assert.assertEquals(manifest.getDependencies().get(0).getPackageName(), "crates.io");
+        Assert.assertEquals(manifest.getDependencies().get(0).getVersion(), "\"0.15\"");
+        Assert.assertEquals(manifest.getDependencies().get(1).getPackageName(), "jquery");
+        Assert.assertEquals(manifest.getDependencies().get(2).getVersion(), "\"1.66\"");
+
+        Assert.assertEquals(manifest.getPatches().get(0).getPackageName(), "jobapi");
+        Assert.assertEquals(manifest.getPatches().get(1).getPackageName(), "toml");
+
+    }
 }

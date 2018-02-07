@@ -196,7 +196,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      *
      * @param keyContextList list of keys specified in the header
      */
-    public void addHeader(List<TomlParser.KeyContext> keyContextList) {
+    private void addHeader(List<TomlParser.KeyContext> keyContextList) {
         currentHeader = keyContextList.get(0).getText();
         if (keyContextList.size() > 1) {
             String pkgName = keyContextList.stream().filter(i -> !i.getText().equals(currentHeader))
@@ -210,7 +210,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      *
      * @param ctx InlineTableKeyvalsContext object
      */
-    public void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
+    private void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
         if (Section.DEPENDENCIES.stringEquals(currentHeader) || Section.PATCHES.stringEquals(currentHeader)) {
             createDependencyObject(currentKey);
             if (ctx != null) {
@@ -229,7 +229,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      * Create dependency object and set the name
      * @param packageName pkg name of the dependency
      */
-    public void createDependencyObject(String packageName) {
+    private void createDependencyObject(String packageName) {
         dependency = new Dependency();
         DependencyField dependencyField = DependencyField.lookup.get("name");
         if (dependencyField != null) {
