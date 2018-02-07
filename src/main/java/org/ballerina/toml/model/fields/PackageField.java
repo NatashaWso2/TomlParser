@@ -43,6 +43,7 @@ public enum PackageField {
     public static final Map<String, PackageField> LOOKUP = new HashMap<>();
 
     /**
+     * We need to lookup package fields by lowercase.
      * Populate the map with the package fields and the package name
      */
     static {
@@ -56,6 +57,7 @@ public enum PackageField {
 
     /**
      * Constructor which sets the string value
+     *
      * @param stringSetter
      */
     PackageField(BiConsumer<Manifest, String> stringSetter) {
@@ -64,8 +66,9 @@ public enum PackageField {
 
     /**
      * Constructor which sets a list of strings
+     *
      * @param stringSetter string to be set: will be always null
-     * @param listSetter list of strings
+     * @param listSetter   list of strings
      */
     PackageField(BiConsumer<Manifest, String> stringSetter, BiConsumer<Manifest, List<String>> listSetter) {
         this.stringSetter = stringSetter;
@@ -74,8 +77,9 @@ public enum PackageField {
 
     /**
      * Set the string value to the manifest object
+     *
      * @param manifest manifest object
-     * @param value string value
+     * @param value    string value
      */
     public void setStringTo(Manifest manifest, String value) {
         if (stringSetter != null) {
@@ -87,14 +91,15 @@ public enum PackageField {
 
     /**
      * Set the list of strings to the manifest object
+     *
      * @param manifest manifest object
-     * @param list list of strings
+     * @param list     list of strings
      */
     public void setListTo(Manifest manifest, List<String> list) {
         if (listSetter != null) {
             listSetter.accept(manifest, list);
         } else {
-            throw new IllegalStateException(this + " field can't have string value " + list.toString());
+            throw new IllegalStateException(this + " field can't have list value " + list.toString());
         }
     }
 }

@@ -42,7 +42,7 @@ public enum DependencyField {
         }
     }
 
-    private BiConsumer<Dependency, String> stringSetter;
+    private final BiConsumer<Dependency, String> stringSetter;
 
     /**
      * Constructor which sets the string value
@@ -59,12 +59,8 @@ public enum DependencyField {
      * @param dependency
      * @param value
      */
-    public void setValue(Dependency dependency, String value) {
-        if (stringSetter != null) {
-            stringSetter.accept(dependency, value);
-        } else {
-            throw new NullPointerException("String setter is null");
-        }
+    public void setValueTo(Dependency dependency, String value) {
+        stringSetter.accept(dependency, value);
     }
 
 }

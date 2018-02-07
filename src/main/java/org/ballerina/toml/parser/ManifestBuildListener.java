@@ -41,6 +41,7 @@ public class ManifestBuildListener extends TomlBaseListener {
 
     /**
      * Cosntructor with the manifest object
+     *
      * @param manifest manifest object
      */
     public ManifestBuildListener(Manifest manifest) {
@@ -56,7 +57,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      */
     @Override
     public void enterKeyval(TomlParser.KeyvalContext ctx) {
-        currentKey = ctx.key().getText();
+        pushKey(ctx.key().getText());
     }
 
     /**
@@ -68,10 +69,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      */
     @Override
     public void enterString(TomlParser.StringContext ctx) {
-        if (currentKey != null) {
-            setToManifest(ctx.getText());
-            currentKey = null;
-        }
+        setToManifest(ctx.getText());
     }
 
     /**
@@ -95,10 +93,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      */
     @Override
     public void enterArray(TomlParser.ArrayContext ctx) {
-        if (currentKey != null) {
-            addArrayElements(ctx.arrayValues());
-            currentKey = null;
-        }
+        setToManifest(ctx.arrayValues());
     }
 
     /**
@@ -122,10 +117,7 @@ public class ManifestBuildListener extends TomlBaseListener {
      */
     @Override
     public void enterInlineTable(TomlParser.InlineTableContext ctx) {
-        if (currentKey != null) {
-            addInlineTableContent(ctx.inlineTableKeyvals());
-            currentKey = null;
-        }
+        setToManifest(ctx.inlineTableKeyvals());
     }
 
     /**
@@ -160,15 +152,15 @@ public class ManifestBuildListener extends TomlBaseListener {
      * @param value KeyvalContext object
      */
     private void setToManifest(String value) {
-        if (Section.PACKAGE.stringEquals(currentHeader)) {
-            PackageField packageFieldField = PackageField.LOOKUP.get(currentKey);
+        if (hasKey() && Section.PACKAGE.stringEquals(currentHeader)) {
+            PackageField packageFieldField = PackageField.LOOKUP.get(popKey());
             if (packageFieldField != null) {
                 packageFieldField.setStringTo(this.manifest, value);
             }
-        } else if (Section.DEPENDENCIES.stringEquals(currentHeader) || Section.PATCHES.stringEquals(currentHeader)) {
-            DependencyField dependencyField = DependencyField.lookup.get(currentKey);
+        } else if (hasKey() && (Section.DEPENDENCIES.stringEquals(currentHeader) || Section.PATCHES.stringEquals(currentHeader))) {
+            DependencyField dependencyField = DependencyField.lookup.get(popKey());
             if (dependencyField != null) {
-                dependencyField.setValue(dependency, value);
+                dependencyField.setValueTo(dependency, value);
             }
         }
     }
@@ -178,17 +170,30 @@ public class ManifestBuildListener extends TomlBaseListener {
      *
      * @param arrayValuesContext ArrayValuesContext object
      */
-    private void addArrayElements(TomlParser.ArrayValuesContext arrayValuesContext) {
-        PackageField packageFieldField = PackageField.LOOKUP.get(currentKey);
-        if (packageFieldField != null) {
-            List<String> arrayElements = new ArrayList<>();
-            if (arrayValuesContext != null) {
-                for (TomlParser.ArrayvalsNonEmptyContext valueContext : arrayValuesContext.arrayvalsNonEmpty()) {
-                    arrayElements.add(valueContext.getText());
-                }
+    private void setToManifest(TomlParser.ArrayValuesContext arrayValuesContext) {
+        if (hasKey() && Section.PACKAGE.stringEquals(currentHeader)) {
+            PackageField packageFieldField = PackageField.LOOKUP.get(popKey());
+            if (packageFieldField != null) {
+                List<String> arrayElements = populateList(arrayValuesContext);
+                packageFieldField.setListTo(this.manifest, arrayElements);
             }
-            packageFieldField.setListTo(this.manifest, arrayElements);
         }
+    }
+
+    /**
+     * Populate list values
+     *
+     * @param arrayValuesContext
+     * @return list of strings
+     */
+    private List<String> populateList(TomlParser.ArrayValuesContext arrayValuesContext) {
+        List<String> arrayElements = new ArrayList<>();
+        if (arrayValuesContext != null) {
+            for (TomlParser.ArrayvalsNonEmptyContext valueContext : arrayValuesContext.arrayvalsNonEmpty()) {
+                arrayElements.add(valueContext.getText());
+            }
+        }
+        return arrayElements;
     }
 
     /**
@@ -210,30 +215,77 @@ public class ManifestBuildListener extends TomlBaseListener {
      *
      * @param ctx InlineTableKeyvalsContext object
      */
-    private void addInlineTableContent(TomlParser.InlineTableKeyvalsContext ctx) {
-        if (Section.DEPENDENCIES.stringEquals(currentHeader) || Section.PATCHES.stringEquals(currentHeader)) {
-            createDependencyObject(currentKey);
+    private void setToManifest(TomlParser.InlineTableKeyvalsContext ctx) {
+        if (hasKey() &&
+                (Section.DEPENDENCIES.stringEquals(currentHeader) ||
+                        Section.PATCHES.stringEquals(currentHeader))) {
+            createDependencyObject(popKey());
             if (ctx != null) {
-                for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
-                    String name = valueContext.key().getText();
-                    DependencyField dependencyField = DependencyField.lookup.get(name);
-                    if (dependencyField != null) {
-                        dependencyField.setValue(dependency, valueContext.val().getText());
-                    }
-                }
+                populateDependencyField(ctx);
             }
         }
     }
 
     /**
+     * Populate dependency fields by iterating over the context object
+     *
+     * @param ctx Inline table values
+     */
+    private void populateDependencyField(TomlParser.InlineTableKeyvalsContext ctx) {
+        for (TomlParser.InlineTableKeyvalsNonEmptyContext valueContext : ctx.inlineTableKeyvalsNonEmpty()) {
+            String name = valueContext.key().getText();
+            DependencyField dependencyField = DependencyField.lookup.get(name);
+            if (dependencyField != null) {
+                dependencyField.setValueTo(dependency, valueContext.val().getText());
+            }
+        }
+    }
+
+    /**
+     * Set the current key processed
+     *
+     * @param value current key processed
+     */
+    private void pushKey(String value) {
+        currentKey = value;
+    }
+
+    /**
+     * Get the current key and set it to null once accessed
+     *
+     * @return currently processed key
+     */
+    private String popKey() {
+        if (currentKey == null) {
+            throw new IllegalStateException("Key is null");
+        }
+        String lastKey = this.currentKey;
+        this.currentKey = null;
+        return lastKey;
+    }
+
+    /**
+     * Check if the current key is null or not
+     *
+     * @return true if the key is there else false
+     */
+    private boolean hasKey() {
+        if (currentKey != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Create dependency object and set the name
+     *
      * @param packageName pkg name of the dependency
      */
     private void createDependencyObject(String packageName) {
         dependency = new Dependency();
         DependencyField dependencyField = DependencyField.lookup.get("name");
         if (dependencyField != null) {
-            dependencyField.setValue(dependency, packageName);
+            dependencyField.setValueTo(dependency, packageName);
         }
     }
 }
